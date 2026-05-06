@@ -279,44 +279,47 @@ ip6tables -w -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --cla
 ## SNAT
 #iptables -w -t nat -A POSTROUTING -d $DESTINATION_IP -j SNAT --to-source $DEFAULT_IP
 
+echo
+echo "DESTINATION_IP=$DESTINATION_IP"
+echo "DEFAULT_IP=$DEFAULT_IP"
 # OpenVPN TCP (проброс)
-iptables -t nat -A PREROUTING -p tcp --dport 50080 -j DNAT --to-destination "$DESTINATION_IP":50080
-iptables -t nat -A PREROUTING -p tcp --dport 50443 -j DNAT --to-destination "$DESTINATION_IP":50443
-iptables -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 50080 -j SNAT --to-source "$EXTERNAL_IP"
-iptables -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 50443 -j SNAT --to-source "$EXTERNAL_IP"
+iptables -w -t nat -A PREROUTING -p tcp --dport 50080 -j DNAT --to-destination "$DESTINATION_IP":50080
+iptables -w -t nat -A PREROUTING -p tcp --dport 50443 -j DNAT --to-destination "$DESTINATION_IP":50443
+iptables -w -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 50080 -j SNAT --to-source "$DEFAULT_IP"
+iptables -w -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 50443 -j SNAT --to-source "$DEFAULT_IP"
 
 
 # OpenVPN UDP (если реально нужен)
-iptables -t nat -A PREROUTING -p udp --dport 50080 -j DNAT --to-destination "$DESTINATION_IP":50080
-iptables -t nat -A PREROUTING -p udp --dport 50443 -j DNAT --to-destination "$DESTINATION_IP":50443
-iptables -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 50080 -j SNAT --to-source "$EXTERNAL_IP"
-iptables -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 50443 -j SNAT --to-source "$EXTERNAL_IP"
+iptables -w -t nat -A PREROUTING -p udp --dport 50080 -j DNAT --to-destination "$DESTINATION_IP":50080
+iptables -w -t nat -A PREROUTING -p udp --dport 50443 -j DNAT --to-destination "$DESTINATION_IP":50443
+iptables -w -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 50080 -j SNAT --to-source "$DEFAULT_IP"
+iptables -w -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 50443 -j SNAT --to-source "$DEFAULT_IP"
 
 # Squid proxy TCP 60006
-iptables -t nat -A PREROUTING -p tcp --dport 60006 -j DNAT --to-destination "$DESTINATION_IP":60006
-iptables -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 60006 -j SNAT --to-source "$EXTERNAL_IP"
+iptables -w -t nat -A PREROUTING -p tcp --dport 60006 -j DNAT --to-destination "$DESTINATION_IP":60006
+iptables -w -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 60006 -j SNAT --to-source "$DEFAULT_IP"
 
 # Telegram MTproxy TCP проброс 8843 и 902
-iptables -t nat -A PREROUTING -p tcp --dport 8843 -j DNAT --to-destination "$DESTINATION_IP":8843
-iptables -t nat -A PREROUTING -p tcp --dport 902  -j DNAT --to-destination "$DESTINATION_IP":902
-iptables -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 8843 -j SNAT --to-source "$EXTERNAL_IP"
-iptables -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 902  -j SNAT --to-source "$EXTERNAL_IP"
+iptables -w -t nat -A PREROUTING -p tcp --dport 8843 -j DNAT --to-destination "$DESTINATION_IP":8843
+iptables -w -t nat -A PREROUTING -p tcp --dport 902  -j DNAT --to-destination "$DESTINATION_IP":902
+iptables -w -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 8843 -j SNAT --to-source "$DEFAULT_IP"
+iptables -w -t nat -A POSTROUTING -p tcp -d "$DESTINATION_IP" --dport 902  -j SNAT --to-source "$DEFAULT_IP"
 
 
 # WireGuard/AmneziaWG
-iptables -t nat -A PREROUTING -p udp --dport 51080 -j DNAT --to-destination "$DESTINATION_IP":51080
-iptables -t nat -A PREROUTING -p udp --dport 51443 -j DNAT --to-destination "$DESTINATION_IP":51443
-iptables -t nat -A PREROUTING -p udp --dport 52080 -j DNAT --to-destination "$DESTINATION_IP":52080
-iptables -t nat -A PREROUTING -p udp --dport 52443 -j DNAT --to-destination "$DESTINATION_IP":52443
+iptables -w -t nat -A PREROUTING -p udp --dport 51080 -j DNAT --to-destination "$DESTINATION_IP":51080
+iptables -w -t nat -A PREROUTING -p udp --dport 51443 -j DNAT --to-destination "$DESTINATION_IP":51443
+iptables -w -t nat -A PREROUTING -p udp --dport 52080 -j DNAT --to-destination "$DESTINATION_IP":52080
+iptables -w -t nat -A PREROUTING -p udp --dport 52443 -j DNAT --to-destination "$DESTINATION_IP":52443
 
-iptables -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 51080 -j SNAT --to-source "$EXTERNAL_IP"
-iptables -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 51443 -j SNAT --to-source "$EXTERNAL_IP"
-iptables -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 52080 -j SNAT --to-source "$EXTERNAL_IP"
-iptables -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 52443 -j SNAT --to-source "$EXTERNAL_IP"
+iptables -w -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 51080 -j SNAT --to-source "$DEFAULT_IP"
+iptables -w -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 51443 -j SNAT --to-source "$DEFAULT_IP"
+iptables -w -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 52080 -j SNAT --to-source "$DEFAULT_IP"
+iptables -w -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 52443 -j SNAT --to-source "$DEFAULT_IP"
 
 
 # NAT для VPN подсети
-iptables -t nat -A POSTROUTING -s "$VPN_SUBNET" -o "$WAN_IFACE" -j MASQUERADE
+iptables -w -t nat -A POSTROUTING -s "$VPN_SUBNET" -o "$WAN_IFACE" -j MASQUERADE
 
 # Сброс счётчиков
 iptables -w -Z
