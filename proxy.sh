@@ -319,7 +319,7 @@ iptables -w -t nat -A POSTROUTING -p udp -d "$DESTINATION_IP" --dport 52443 -j S
 
 
 # NAT для VPN подсети
-iptables -w -t nat -A POSTROUTING -s "$VPN_SUBNET" -o "$WAN_IFACE" -j MASQUERADE
+#iptables -w -t nat -A POSTROUTING -s "$VPN_SUBNET" -o "$WAN_IFACE" -j MASQUERADE
 
 # Сброс счётчиков
 iptables -w -Z
