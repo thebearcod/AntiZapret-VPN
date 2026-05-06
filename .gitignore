@@ -1,0 +1,12 @@
+# IDE
+.idea/
+.osp/
+/nbproject/
+/cgi-bin/
+.DS_Store/
+
+/.htaccess
+/.htpasswd
+/.htsecure
+
+/vendor/

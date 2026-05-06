@@ -208,7 +208,7 @@ WireGuard/AmneziaWG на роутерах [Keenetic](https://4pda.to/forum/index
 1. Устанавливать на Ubuntu 22.04 или Debian 12 или новее, рекомендуется Ubuntu 24.04
 2. Для установки или обновления в терминале под root выполнить
 ```
-bash <(wget -qO- --no-hsts --inet4-only https://raw.githubusercontent.com/GubernievS/AntiZapret-VPN/main/proxy.sh)
+bash <(wget -qO- --no-hsts --inet4-only https://raw.githubusercontent.com/thebearcod/AntiZapret-VPN/refs/heads/main/proxy.sh)
 ```
 3. Ввести IPv4-адрес зарубежного сервера АнтиЗапрета
 4. Заменить в профилях подключения IPv4-адрес/домен АнтиЗапрета на новый IPv4-адрес/домен прокси-сервера
